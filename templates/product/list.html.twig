@@ -3,10 +3,92 @@
 {% block title %}Liste des produits{% endblock %}
 
 {% block body %}
+    
+    
+<section class="products section">
+
+	<div class="container">
     <h1>Liste de tous les produits</h1>
-    <ul>
-    {% for product in products %}
-        <li>{{ product.name }}</li>
+    {% for message in app.flashes('notice') %}
+    <div class="alert alert-success" role="alert">
+    {{ message }}
+    </div>
+       
     {% endfor %}
-    </ul>
+		<div class="row">
+		 {% for product in products %}	
+			<div class="col-md-4">
+				<div class="product-item">
+					<div class="product-thumb">
+						<span class="bage">Sale</span>
+                         {% set chemin = '/product/images/' ~ product.image  %}
+        
+						<img class="img-responsive" src="{{asset(chemin)}}" alt="product-img" />
+						<div class="preview-meta">
+							<ul>
+								<li><a href="{{path('app_product_detail',{id:product.id})}}">
+									<span>
+										<i class="tf-ion-ios-search-strong"></i>
+									</span
+                                    ></a>
+								</li>
+                                
+								<li>
+			                        <a href="#!" ><i class="tf-ion-ios-heart"></i></a>
+								</li>
+								<li>
+									<a href="#!"><i class="tf-ion-android-cart"></i></a>
+								</li>
+							</ul>
+                      	</div>
+					</div>
+					<div class="product-content">
+						<h4><a href="product-single.html">{{ product.name }}</a></h4>
+						<p class="price">{{product.price}}</p>
+					</div>
+				</div>
+			</div>
+        {% endfor %}
+		
+		<!-- Modal -->
+		<div class="modal product-modal fade" id="product-modal">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<i class="tf-ion-close"></i>
+			</button>
+		  	<div class="modal-dialog " role="document">
+		    	<div class="modal-content">
+			      	<div class="modal-body">
+			        	<div class="row">
+			        		<div class="col-md-8 col-sm-6 col-xs-12">
+			        			<div class="modal-image">
+				        			<img class="img-responsive" src="images/shop/products/modal-product.jpg" alt="product-img" />
+			        			</div>
+			        		</div>
+			        		<div class="col-md-4 col-sm-6 col-xs-12">
+			        			<div class="product-short-details">
+			        				<h2 class="product-title">GM Pendant, Basalt Grey</h2>
+			        				<p class="product-price">$200</p>
+			        				<p class="product-short-description">
+			        					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem iusto nihil cum. Illo laborum numquam rem aut officia dicta cumque.
+			        				</p>
+			        				<a href="cart.html" class="btn btn-main">Add To Cart</a>
+			        				<a href="product-single.html" class="btn btn-transparent">View Product Details</a>
+			        			</div>
+			        		</div>
+			        	</div>
+			        </div>
+		    	</div>
+		  	</div>
+		</div><!-- /.modal -->
+
+		</div>
+	</div>
+</section>
+
+
+
+
+
+
+
 {% endblock %}

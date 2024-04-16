@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des produits{% endblock %}
+
+{% block body %}
+    
+    
+<section class="products section">
+
+	<div class="container">
+    <h1>Detail du produit :{{product.id}}</h1>
+		<p>Id du produit: {{product.id}} </p>
+        <p>Nom du produit : {{product.name}} </p>
+        <p>Prix du produit : {{product.price}} </p>
+        <p>
+        {% set chemin = '/product/images/' ~ product.image  %}
+        <img src="{{asset(chemin)}}"/></p>
+	</div>
+</section>
+
+
+
+
+
+
+
+{% endblock %}
