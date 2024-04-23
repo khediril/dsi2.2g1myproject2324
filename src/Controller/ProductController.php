@@ -41,4 +41,11 @@ class ProductController extends AbstractController
         //return $this->render('product/delete.html.twig', []);
         return $this->redirectToRoute('app_product_list');
     }
+    #[Route('/{min}/{max}', name: 'listbyprice')]
+    public function listByPrice($min,$max,ProductRepository $productRepository): Response
+    {
+        $products = $productRepository->findByPriceDQL($min,$max);
+        
+        return $this->render('product/listByPrice.html.twig', ['products' => $products]);
+    }
 }

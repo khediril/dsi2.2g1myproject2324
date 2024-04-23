@@ -21,6 +21,41 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findByPrice($min, $max)
+    {
+        $qb =  $this->createQueryBuilder('p');
+
+        $qb->Where('p.price <= :max');
+        $qb->andWhere('p.price >= :min');
+        $qb->setParameter('max',$max);
+        $qb->setParameter('min',$min);
+        $qb->orderBy('p.price', 'ASC');
+
+        $requete = $qb->getQuery();
+        $products = $requete->getResult();
+        return $products;
+    }
+
+    public function findbyPriceDQL($min,$max)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Product p
+            WHERE p.price >= :min and p.price <= :max
+            ORDER BY p.price ASC'
+        )->setParameter('min', $min)
+        ->setParameter('max',$max);
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
+
+
+
+
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
