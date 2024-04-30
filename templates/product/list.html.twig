@@ -9,12 +9,13 @@
 
 	<div class="container">
     <h1>Liste de tous les produits</h1>
+
     {% for message in app.flashes('notice') %}
-    <div class="alert alert-success" role="alert">
-    {{ message }}
-    </div>
-       
+    	<div class="alert alert-success" role="alert">
+    		{{ message }}
+    	</div>
     {% endfor %}
+
 		<div class="row">
 		 {% for product in products %}	
 			<div class="col-md-4">

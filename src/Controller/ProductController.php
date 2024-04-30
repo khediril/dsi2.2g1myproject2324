@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,7 +23,7 @@ class ProductController extends AbstractController
         return $this->render('product/list.html.twig', ['products' => $products]);
     }
    
-    #[Route('/{id}', name: 'detail')]
+    #[Route('/{id}', name: 'detail',requirements: ['id' => '\d+'])]
     public function detail($id,ProductRepository $productRepository): Response
     {
         $product = $productRepository->find($id);
@@ -47,5 +50,34 @@ class ProductController extends AbstractController
         $products = $productRepository->findByPriceDQL($min,$max);
         
         return $this->render('product/listByPrice.html.twig', ['products' => $products]);
+    }
+    #[Route('/add', name: 'add')]
+    public function add(Request $request,ProductRepository $productRepository,EntityManagerInterface $em): Response
+    {
+        $produit = new Product();
+        $form = $this->createForm(ProductType::class,$produit);
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $produit = $form->getData();
+            
+            $em->persist($produit);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'Produit Ajoute avec succes!'
+            );
+
+            // ... perform some action, such as saving the task to the database
+
+            return $this->redirectToRoute('app_product_list');
+        }
+
+       
+       
+        
+        return $this->render('product/add.html.twig', ['form' => $form]);
     }
 }
