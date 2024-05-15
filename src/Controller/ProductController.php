@@ -8,6 +8,7 @@ use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -51,9 +52,13 @@ class ProductController extends AbstractController
         
         return $this->render('product/listByPrice.html.twig', ['products' => $products]);
     }
+    
     #[Route('/add', name: 'add')]
     public function add(Request $request,ProductRepository $productRepository,EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        
         $produit = new Product();
         $form = $this->createForm(ProductType::class,$produit);
         
@@ -75,9 +80,13 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_list');
         }
 
-       
-       
-        
         return $this->render('product/add.html.twig', ['form' => $form]);
+    }
+    #[Route('/test', name: 'test')]
+    public function test(): JsonResponse
+    {
+        //$products = $productRepository->findByPriceDQL($min,$max);
+        $tab = ["nom"=>"test1","nom"=>'test2'];
+        return $this->json($tab);
     }
 }
